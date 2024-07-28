@@ -31,7 +31,7 @@ class CurrencyExchange extends Model
     ];
 
     protected $casts = [
-        'rate' => 'decimal',
+        'rate' => 'decimal:8',
         'date' => 'date',
     ];
 

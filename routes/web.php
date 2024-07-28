@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Front\CurrencyExchangeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('index');
-});
+})->name('front.index');
+
+
+Route::post('/currency-rates', [CurrencyExchangeController::class, 'index'])->name('front.currency-rates');
