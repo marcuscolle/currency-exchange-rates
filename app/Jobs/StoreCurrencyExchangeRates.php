@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\CurrencyExchangeEvent;
 use App\Models\Currency;
 use App\Models\CurrencyExchange;
 use App\Services\Api\ExchangeApi;
@@ -48,6 +49,7 @@ class StoreCurrencyExchangeRates implements ShouldQueue
             if (!$this->checkCurrencyCode($response['base'])) {
                 $currencyName = $this->exchangeApi->getCurrencyName($response['base']);
 
+                /** @var Currency $currency */
                 $currency = Currency::query()->firstOrCreate([
                     'uuid' => Str::uuid(),
                     'name' => $currencyName,
@@ -60,12 +62,14 @@ class StoreCurrencyExchangeRates implements ShouldQueue
             if (!$this->checkCurrencyDate($response['timestamp'])) {
                 $rates = $response['rates'];
                 $baseCurrency = Currency::query()->where('code', $response['base'])->first();
+                $date = date('Y-m-d', $response['timestamp']);
+                $currencyRates = [];
 
                 foreach ($rates as $code => $rate) {
                     $name = $this->exchangeApi->getCurrencyName($code);
-                    $date = date('Y-m-d', $response['timestamp']);
                     $currency_id = $baseCurrency->id;
 
+                    /** @var CurrencyExchange $currencyExchange */
                     $currencyExchange = CurrencyExchange::query()->create([
                         'uuid' => Str::uuid(),
                         'currency_id' => $currency_id,
@@ -76,25 +80,31 @@ class StoreCurrencyExchangeRates implements ShouldQueue
                     ]);
 
                     Log::info('Currency Exchange created', ['name' => $currencyExchange->name, 'code' => $currencyExchange->code]);
-                }
-            }
 
+//                  Build the array for event
+                    $currencyRates[] = [
+                        'base_currency' => $response['base'],
+                        'code' => $code,
+                        'name' => $name,
+                        'rate' => $rate,
+                        'date' => $date
+                    ];
+                }
+
+                // Dispatch the event with the currencyRates array
+                event(new CurrencyExchangeEvent($currencyRates));
+            }
         } catch (Exception $e) {
             Log::error('An error occurred while storing currency exchange rates.', ['error' => $e->getMessage()]);
         }
     }
 
-    /**
-     * Check if the currency code already exists.
-     */
+
     public function checkCurrencyCode($currencyCode): bool
     {
         return Currency::query()->where('code', $currencyCode)->exists();
     }
 
-    /**
-     * Check if exchange rates for the given date already exist.
-     */
     public function checkCurrencyDate($date): bool
     {
         return CurrencyExchange::query()->where('date', date('Y-m-d', $date))->exists();

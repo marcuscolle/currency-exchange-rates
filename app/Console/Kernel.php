@@ -12,7 +12,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-         $schedule->command('fetch:currency');
+        //following uk forex market time.
+         $schedule->command('fetch:currency')->dailyAt('18:00');
 //         $schedule->command('fetch:currency')->everyMinute();
     }
 

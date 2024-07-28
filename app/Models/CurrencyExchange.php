@@ -10,9 +10,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class CurrencyExchange
  * @package App\Models
+ * @property string $uuid
+ * @property int $currency_id
  * @property string $code
  * @property string $name
- * @property string $rate
  * @property string $date
  */
 
