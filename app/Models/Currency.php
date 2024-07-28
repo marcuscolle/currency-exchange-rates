@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class Currency
  * @package App\Models
- * @property string $currency_code
+ * @property string $code
  * @property string $name
  */
 
@@ -19,7 +19,8 @@ class Currency extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'currency_code',
+        'uuid',
+        'code',
         'name'
     ];
 

@@ -5,6 +5,7 @@ namespace App\Services\Api;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Http;
+use PhpParser\Node\Expr\Array_;
 
 class ExchangeApi
 {
@@ -12,30 +13,43 @@ class ExchangeApi
     {
     }
 
-    public function getLatestData(): JsonResponse
+    public function getLatestData(): JsonResponse|array
     {
-
-        $response = latestData();
-
-        if(!$response->successful()) {
-            return response()->json(['error' => 'Failed to connect to the API'], 500);
+        try{
+            $response = latestData();
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
 
-        return response()->json($response->json());
+        return $response->json();
     }
 
 
 
-    public function getHistoricalData($date): JsonResponse
+    public function getHistoricalData($date): JsonResponse|array
     {
-
-        $response = historicalData($date);
-
-        if(!$response->successful()) {
-            return response()->json(['error' => 'Failed to connect to the API'], 500);
+        try{
+            $response = historicalData($date);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
 
-        return response()->json($response->json());
+        return $response->json();
+    }
+
+    public function getCurrencyName($currencyCode): string
+    {
+
+        try{
+            $response = currencyName();
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+
+        $data = $response->json();
+
+        return $data[$currencyCode];
+
     }
 
 

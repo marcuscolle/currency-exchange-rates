@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\StoreCurrencyExchangeRates;
+use App\Services\Api\ExchangeApi;
 use Illuminate\Console\Command;
 
 class FetchCurrencyExchangeRates extends Command
@@ -28,7 +29,7 @@ class FetchCurrencyExchangeRates extends Command
     {
         //command created to dispatch the job manually from the console for dev test or debugging and trigger the job on task schedule.
 
-        StoreCurrencyExchangeRates::dispatch();
+        StoreCurrencyExchangeRates::dispatch(new ExchangeApi());
         $this->info('FetchExchangeRatesJob dispatched.');
     }
 }

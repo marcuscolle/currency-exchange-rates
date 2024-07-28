@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('currency_exchange', function (Blueprint $table) {
+        Schema::create('currency_exchanges', function (Blueprint $table) {
             $table->id();
             $table->uuid();
             $table->foreignId('currency_id')->constrained()->onDelete('cascade');
-            $table->string('currency_code');
+            $table->string('code');
             $table->string('name')->nullable();
             //used decimal as stares the exact value of the exchange rate
-            $table->decimal('exchange_rate', 20, 20);
-            $table->date('exchange_date');
+            $table->decimal('rate', 16, 8);
+            $table->date('date');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('currency_exchange');
+        Schema::dropIfExists('currency_exchanges');
     }
 };

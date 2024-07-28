@@ -14,12 +14,13 @@ if (!function_exists('latestData')) {
         $apiKey = config('api.exchange.key');
         $baseCurrency = config('api.exchange.base');
         $sslCertPath = config('api.exchange.ssl_cert_path');
+        $symbols = config('api.exchange.symbols');
 
-        //TODO: if time contruct the full url to be dynamic based on the config file.
+        //TODO: if time construct the full url to be dynamic based on the config file.
 //        return Http::get("https://openexchangerates.org/api/latest.json?app_id={$apiKey}&base={$baseCurrency}");
 
         return Http::withOptions(['verify' => $sslCertPath])
-            ->get("https://openexchangerates.org/api/latest.json?app_id={$apiKey}&base={$baseCurrency}");
+            ->get("https://openexchangerates.org/api/latest.json?app_id={$apiKey}&base={$baseCurrency}&symbols={$symbols}");
     }
 }
 
@@ -33,11 +34,12 @@ if(!function_exists('historicalData')) {
         $apiKey = config('api.exchange.key');
         $baseCurrency = config('api.exchange.base');
         $sslCertPath = config('api.exchange.ssl_cert_path');
+        $symbols = config('api.exchange.symbols');
 
 //        return Http::get("https://openexchangerates.org/api/historical/{$date}.json?app_id={$apiKey}&base={$baseCurrency}");
 
         return Http::withOptions(['verify' => $sslCertPath])
-            ->get("https://openexchangerates.org/api/latest.json?app_id={$apiKey}&base={$baseCurrency}");
+            ->get("https://openexchangerates.org/api/latest.json?app_id={$apiKey}&base={$baseCurrency}&symbols={$symbols}");
     }
 }
 

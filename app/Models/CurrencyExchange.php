@@ -10,9 +10,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class CurrencyExchange
  * @package App\Models
- * @property string $currency_code
+ * @property string $code
  * @property string $name
- * @property string $exchange_rate
+ * @property string $rate
  * @property string $date
  */
 
@@ -21,15 +21,16 @@ class CurrencyExchange extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'uuid',
         'currency_id',
-        'currency_code',
+        'code',
         'name',
-        'exchange_rate',
+        'rate',
         'date'
     ];
 
     protected $casts = [
-        'exchange_rate' => 'decimal',
+        'rate' => 'decimal',
         'date' => 'date',
     ];
 
