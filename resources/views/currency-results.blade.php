@@ -23,7 +23,7 @@
                         <td>{{ $rate->code }}</td>
                         <td>{{ $rate->name }}</td>
                         <td>{{ $rate->rate }}</td>
-                        <td>{{ $rate->date }}</td>
+                        <td>{{ $rate->date->format('d-m-Y') }}</td>
                     </tr>
                 @endforeach
                 </tbody>
