@@ -14,7 +14,7 @@ class CurrencyExchangeEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $currencyRates;
+    public array $currencyRates;
 
     /**
      * Create a new event instance.
