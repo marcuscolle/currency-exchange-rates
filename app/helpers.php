@@ -16,8 +16,6 @@ if (!function_exists('latestData')) {
         $sslCertPath = config('api.exchange.ssl_cert_path');
         $symbols = config('api.exchange.symbols');
 
-        //TODO: if time construct the full url to be dynamic based on the config file.
-
         //Path to the url without the verification of the ssl certificate
 //        return Http::get("https://openexchangerates.org/api/latest.json?app_id={$apiKey}&base={$baseCurrency}");
 
@@ -42,7 +40,7 @@ if(!function_exists('historicalData')) {
 //        return Http::get("https://openexchangerates.org/api/historical/{$date}.json?app_id={$apiKey}&base={$baseCurrency}");
 
         return Http::withOptions(['verify' => $sslCertPath])
-            ->get("https://openexchangerates.org/api/latest.json?app_id={$apiKey}&base={$baseCurrency}&symbols={$symbols}");
+            ->get("https://openexchangerates.org/api/historical/{$date}.json?app_id={$apiKey}&base={$baseCurrency}&symbols={$symbols}");
     }
 }
 
